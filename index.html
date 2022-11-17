@@ -4,8 +4,28 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>BagasJS</title>
+
+	<script type="module" src="https://cdn.jsdelivr.net/gh/zerodevx/zero-md@2/dist/zero-md.min.js"></script>
+	<script type="module">
+		import { createApp } from 'https://unpkg.com/petite-vue?module'
+		createApp({
+			count : 1,
+			get plusOne() {
+				return this.count + 1;
+			},
+			increment() {
+				this.count++;
+			}
+		}).mount()
+	</script>
+
 </head>
 <body>
 	<h1>Hey, I am Bagas!</h1>
+	<div v-scope>
+		<p> {{ count }} </p>
+		<p> {{ plusOne }} </p>
+		<button @click="increment">Increment</button>
+	</div>
 </body>
 </html>
