@@ -6,14 +6,35 @@
 	<title>BagasJS</title>
 	
 	<script type="module" src="https://cdn.jsdelivr.net/gh/zerodevx/zero-md@2/dist/zero-md.min.js"></script>
-	<script type="module" src="assets/js/app.js"></script>
+	<script type="module">
+		import { createApp } from 'https://unpkg.com/petite-vue?module'
+
+		function Application({ initialValue }){
+			return {
+				count : initialValue,
+				get plusOne() {
+					return this.count + 1;
+				},
+				increment() {
+					this.count++;
+				}
+				$template : "#counter-template"
+			}
+		}
+		createApp({
+			Application
+		}).mount()
+	</script>
+
 </head>
 <body>
 	<h1>Hey, I am Bagas!</h1>
-	<div v-scope>
+	<div v-scope = "Application({ initialValue : 0 })"></div>
+	
+	<template id="counter-template">
 		<p> {{ count }} </p>
 		<p> {{ plusOne }} </p>
 		<button @click="increment">Increment</button>
-	</div>
+	</template>
 </body>
 </html>
