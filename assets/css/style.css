@@ -15,4 +15,22 @@
 .gradient-text {
 	-webkit-background-clip : text;
 	-webkit-text-fill-color : transparent;
+=======
+/*@font-face {
+	font-family: minecraft;
+	src: url("../fonts/minecraft-webfont.woff") format("woff"), 
+		url("../fonts/minecraft-webfont.woff2") format("woff2");
+	font-weight: normal;
+	font-style: normal;
+}
+*/
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+* {
+	font-family: 'Roboto' sans-serif;
+}
+
+.gradient-text {
+	-webkit-background-clip : text;
+	-webkit-text-fill-color : transparent;
 }
