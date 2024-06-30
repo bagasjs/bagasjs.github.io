@@ -1,0 +1,11 @@
+{
+    "posts": [
+        {
+            "title": "First Post",
+            "excerpt": "This is my first post",
+            "content_filename": "first-post.md",
+            "created_at": "2024-06-27T05:10:39.608Z",
+            "tags": ["life"]
+        }
+    ]
+}

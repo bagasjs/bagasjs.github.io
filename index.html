@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bagas Sitanggang - Personal Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="index.js"></script>
+</head>
+<body> 
+    <nav class="flex flex-col py-2">
+        <div class="flex px-5 justify-between items-center">
+            <a class="flex items-center space-x-5" href="">
+                <img class="rounded-full" src="./assets/icons/na.png" width="30" height="30" alt="icon"/>
+                <h3 class="text-2xl font-bold">Bagas JS</h3>
+            </a>
+            <div class="flex items-center space-x-5">
+                <a href="https://instagram.com/">
+                    <img width="30" height="30" src="./assets/icons/instagram.webp" alt="social-instagram"/>
+                </a>
+                <a href="https://github.com/bagasjs">
+                    <img width="30" height="30" src="./assets/icons/github.png" alt="social-github"/>
+                </a>
+                <a href="https://myanimelist.net/profile/AfterSchoolSAN">
+                    <img width="30" height="30" src="./assets/icons/mal.png" alt="social-MAL"/>
+                </a>
+            </div>
+        </div>
+        <ul class="flex px-5 py-3 mt-3 space-x-5 bg-gray-50 border-y border-black">
+            <li class="font-light hover:text-gray-500"><a href="/">Home</a></li>
+            <li class="font-light hover:text-gray-500"><a href="/#works">Works</a></li>
+            <li class="font-light hover:text-gray-500"><a href="/hobby.html">Hobby</a></li>
+            <li class="font-light hover:text-gray-500"><a href="/#posts">Posts</a></li>
+        </ul>
+    </nav>
+    <div id="container" class="flex flex-col">
+        <section id="jumbotron" class="flex justify-center items-center">
+            <div class="flex flex-col lg:flex-row py-5 space-x-10 items-center">
+                <img class="rounded-full mb-3" width="300" height="300" src="./assets/icons/na.png" alt="jumbotron image"/>
+                <div>
+                    <h1 class="text-5xl mb-3 font-extrabold">Hello, I am Bagas</h1>
+                    <p class="">I'm a self-taught programmer and basically doing programming for fun.</p>
+                    <h3 class="text-xl font-bold">About me</h3>
+                    <ul class="ml-5 text-sm list-disc">
+                        <li class="my-1">I am also a student in accounting major</li>
+                        <li class="my-1">I am currently working on <span>My Github Page</span></li>
+                        <li class="my-1">I planned to revise my <span>Dotfiles</span></li>
+                        <li class="my-1">I planned to create my own <span>Backend Framework</span></li>
+                    </ul>
+                    <h3 class="text-xl font-bold">My Skills</h3>
+                    <ul class="flex space-x-2">
+                        <li><img src="https://raw.githubusercontent.com/github/explore/main/topics/c/c.png" 
+                            width="20" height="20" alt="C"/></li>
+                        <li><img src="https://raw.githubusercontent.com/github/explore/main/topics/go/go.png" 
+                            width="20" height="20" alt="Go"/></li>
+                        <li><img src="https://raw.githubusercontent.com/github/explore/main/topics/python/python.png" 
+                            width="20" height="20" alt="Python"/></li>
+                        <li><img src="https://raw.githubusercontent.com/github/explore/main/topics/mysql/mysql.png" 
+                            width="20" height="20" alt="MySQL"/></li>
+                        <li><img src="https://raw.githubusercontent.com/github/explore/main/topics/php/php.png" 
+                            width="20" height="20" alt="PHP"/></li>
+                        <li><img src="https://raw.githubusercontent.com/github/explore/main/topics/laravel/laravel.png" 
+                            width="20" height="20" alt="Laravel"/></li>
+                        <li><img src="https://raw.githubusercontent.com/github/explore/main/topics/html/html.png" 
+                            width="20" height="20" alt="HTML"/></li>
+                        <li><img src="https://raw.githubusercontent.com/github/explore/main/topics/javascript/javascript.png" 
+                            width="20" height="20" alt="Javascript"/></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        <section id="posts" class="px-5">
+            <h1 class="text-3xl border-b border-black pb-3 mb-3">Posts</h1>
+            <div id="posts-list" class="flex justify-around">
+            </div>
+        </section>
+    </div>
+    <footer>
+    </footer>
+</body>
+</html>
