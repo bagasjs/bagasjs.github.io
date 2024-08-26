@@ -2,10 +2,17 @@
     "posts": [
         {
             "title": "First Post",
-            "excerpt": "This is my first post",
             "content_filename": "first-post.md",
             "created_at": "2024-06-27T05:10:39.608Z",
-            "tags": ["life"]
+            "tags": ["life"],
+            "excerpt": "This is my first post",
+        },
+        {
+            "title": "How to use Google Drive"
+            "content_filename": "how-to-use-google-drive.md",
+            "created_at": "2024-08-26T08:30:39.608Z",
+            "tags": ["technology"],
+            "excerpt": " Google Drive, today, is known as one of the best tools for managing file or user's data. Even though it's been used by people, not many really knows how to utilize it. So what's Google Drive?",
         }
     ]
 }
