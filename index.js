@@ -7,7 +7,7 @@
         const createdAt = new Date(post.created_at);
         const thumnail = post.thumbnail ? post.thumnail : "/assets/icons/na.png";
         content += `
-            <a href="/content.html?post=${index}" class="flex flex-col items-center">
+            <a href="/content.html?post=${index}" class="flex flex-col items-center md:max-w-md w-full">
                 <img class="" width="300" height="300" src="${thumnail}"/>
                 <div>
                     <h3 class="text-3xl font-bold">${post.title}</h3>
