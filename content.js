@@ -3,14 +3,15 @@
     if(search.has("post")) {
         const index = parseInt(search.get("post"));
         // Fetch database.json
-        let res = await fetch("/assets/database.json");
+        const url = "https://raw.githubusercontent.com/bagasjs/bagasjs.github.io/main/assets/database.json"
+        let res = await fetch(url);
         if (!res.ok) throw new Error(`Error fetching database.json: ${res.statusText}`);
         const data = await res.json();
 
         // Fetch the content file
         if(data.posts[index]) {
             const contentFilename = data.posts[index].content_filename;
-            res = await fetch(`/assets/posts/${contentFilename}`); 
+            res = await fetch(`https://raw.githubusercontent.com/bagasjs/bagasjs.github.io/main/assets/posts/${contentFilename}`); 
             if (!res.ok) {
                 console.log(res.statusText);
                 throw new Error(`Error fetching ${contentFilename}: ${res.statusText}`);

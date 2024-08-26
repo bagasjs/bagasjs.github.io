@@ -1,5 +1,6 @@
 (async () => {
-    const res = await fetch("/assets/database.json");
+    const url = "https://raw.githubusercontent.com/bagasjs/bagasjs.github.io/main/assets/database.json"
+    const res = await fetch(url);
     const data = await res.json();
     let content = "";
     for(const [index, post] of Object.entries(data.posts)) {
