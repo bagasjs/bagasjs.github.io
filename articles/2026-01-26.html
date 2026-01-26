@@ -52,6 +52,12 @@ dropped the project.
 <p class="article-p">
 The problem of implementing array comes because Brainfuck as the underlying system doesn't have the capability of random access. Random access is basically the ability of computer to read or write data instantly from any location. Brainfuck doesn't have this capability since it only can move the data pointers and modify data pointed by the data pointer. 
 </p>
+<p class="article-p">
+There might be a solution to solve this random access problem. For example, I found out that to layout the data into a structure of data and metadata repeated in the tape may fix this problem since we have additional data (the metadata) about the data to work on while reading the data in the current cell. But this requires a huge refactor of the whole code even including the interpreter since FFI expect the data to be layouted immediately without in-between of metadata. But it's just an opinion and I think it's not worth my time to work further.
+</p>
+<p class="article-p">
+In the future, I might want to works with something like this again. There's <a href="https://esolangs.org/wiki/Subleq">another promising esoteric programming language</a> that I think would be easier to use but also still unique and cool to work on. But it will have to wait LOL.
+</p>
 <h3 class="article-h3"> Other Links</h3>
 <p class="article-p">
 <a href="https://github.com/bagasjs/bfpp">The Project Repo</a>
