@@ -70,8 +70,7 @@ def translate_line(line: str) -> str:
                 i += 1
                 result.write(f"<span class=\"article-bold\">{translate_line(value)}</span>")
             case "[":
-                i += 1
-                start = i
+                start = i + 1
                 escape_count = 0
                 while i < len(line):
                     if line[i] == "]":
@@ -86,7 +85,6 @@ def translate_line(line: str) -> str:
                 value = line[start:end]
                 url = ""
                 if line[i] == "(": #)
-                    i += 1
                     start = i + 1
                     escape_count = 0
                     while i < len(line):
