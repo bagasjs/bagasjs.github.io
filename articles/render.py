@@ -31,9 +31,86 @@ html_template = Template(
 </html>
 """)
 
+post_item = Template(""" <li> ${date} - <a href="/articles/2026-01-26.html">${title}</a> </li>\n""")
+
+def translate_line(line: str) -> str:
+    if len(line) == 0: return line
+    result = StringIO()
+    i = 0
+    while i < len(line):
+        match line[i]:
+            case "`":
+                i += 1
+                start = i
+                while i < len(line):
+                    if line[i] == "`":
+                        break
+                    i += 1
+                value = line[start:i]
+                i += 1
+                result.write(f"<span class=\"article-inline-code\">{value}</span>")
+            case "_":
+                i += 1
+                start = i
+                while i < len(line):
+                    if line[i] == "_":
+                        break
+                    i += 1
+                value = line[start:i]
+                i += 1
+                result.write(f"<span class=\"article-italic\">{translate_line(value)}</span>")
+            case "*":
+                i += 1
+                start = i
+                while i < len(line):
+                    if line[i] == "*":
+                        break
+                    i += 1
+                value = line[start:i]
+                i += 1
+                result.write(f"<span class=\"article-bold\">{translate_line(value)}</span>")
+            case "[":
+                i += 1
+                start = i
+                escape_count = 0
+                while i < len(line):
+                    if line[i] == "]":
+                        escape_count -= 1
+                        if escape_count < 1:
+                            break
+                    if line[i] == "[": #]
+                        escape_count += 1
+                    i += 1
+                end = i
+                i += 1
+                value = line[start:end]
+                url = ""
+                if line[i] == "(": #)
+                    i += 1
+                    start = i + 1
+                    escape_count = 0
+                    while i < len(line):
+                        if line[i] == ")":
+                            escape_count -= 1
+                            if escape_count < 1:
+                                break
+                        if line[i] == "(": #)
+                            escape_count += 1
+                        i += 1
+                    end = i
+                    i += 1
+                    url = line[start:end]
+                    result.write(f"<a href=\"{url}\">{value}</a>")
+                else:
+                    result.write(f"[{translate_line(value)}]")
+            case _:
+                result.write(line[i])
+                i += 1
+    return result.getvalue()
+
 def translate_post_to_html(output: StringIO, source: str):
     lines = source.splitlines()
-    in_ref_block = False
+    in_code_block = False
     prev_is_normal_text = False
     for line in lines:
         if line.startswith("#"):
@@ -47,24 +124,17 @@ def translate_post_to_html(output: StringIO, source: str):
                 level += 1
                 if level >= 6:
                     break
-            value = line[level:]
+            value = translate_line(line[level:])
             output.write(f"<h{level} class=\"article-h{level}\">{value}</h{level}>\n")
         elif line.startswith("```"):
             if prev_is_normal_text:
                 output.write("</p>\n")
                 prev_is_normal_text = False
-            in_ref_block = not in_ref_block 
-            if in_ref_block:
-                output.write("<div class=\"article-ref\">\n")
+            in_code_block = not in_code_block 
+            if in_code_block:
+                output.write("<div class=\"article-code\">\n")
             else:
                 output.write("</div>\n")
-        elif line.startswith("=>"):
-            if prev_is_normal_text:
-                output.write("</p>\n")
-                prev_is_normal_text = False
-            line = line[2:].lstrip()
-            url, value = line.split(None, maxsplit=1)
-            output.write(f"<p><a href=\"{url}\">{value}</a></p>\n")
         elif len(line.lstrip()) == 0:
             if prev_is_normal_text:
                 output.write("</p>\n")
@@ -72,7 +142,7 @@ def translate_post_to_html(output: StringIO, source: str):
         else:
             if not prev_is_normal_text:
                 output.write("<p class=\"article-p\">\n")
-            output.write(f"{line}\n")
+            output.write(f"{translate_line(line)}\n")
             prev_is_normal_text = True
             pass
     if prev_is_normal_text:
@@ -102,7 +172,7 @@ def compile_post(filename: str, source: str) -> Tuple[Dict[str, Any], str]:
 if __name__ == "__main__":
     posts = []
     for name in os.listdir(os.getcwd()):
-        if not name.endswith(".gmi"):
+        if not name.endswith(".md"):
             continue
         output_filename = f"{os.path.splitext(name)[0]}.html"
         with open(name, "r") as file:
@@ -115,9 +185,7 @@ if __name__ == "__main__":
     if len(posts) > 0:
         index_body += f'<ul style="list-style-position: inside;">\n'
         for post in posts:
-            index_body += f'    <li><a href="/articles/2026-01-26.html">{post["title"]}</a>\n'
-            index_body += f'        <p>{post["date"]}<p>\n'
-            index_body += f'    </li>\n'
+            index_body += post_item.substitute(title=post["title"], date=post["date"])
         index_body += f'</ul>\n'
     else:
         index_body += "<p>There's no article currently</p>"
