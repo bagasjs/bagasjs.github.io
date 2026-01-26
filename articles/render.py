@@ -2,6 +2,7 @@ from typing import Dict, Tuple, Any
 import os
 from io import StringIO
 from string import Template
+from html import escape as html_escape
 
 html_template = Template(
 """
@@ -58,7 +59,7 @@ def translate_line(line: str) -> str:
                     i += 1
                 value = line[start:i]
                 i += 1
-                result.write(f"<span class=\"article-inline-code\">{value}</span>")
+                result.write(f"<span class=\"article-inline-code\">{html_escape(value)}</span>")
             case "_":
                 i += 1
                 start = i
@@ -68,7 +69,7 @@ def translate_line(line: str) -> str:
                     i += 1
                 value = line[start:i]
                 i += 1
-                result.write(f"<span class=\"article-italic\">{translate_line(value)}</span>")
+                result.write(f"<span class=\"article-italic\">{html_escape(translate_line(value))}</span>")
             case "*":
                 i += 1
                 start = i
@@ -78,7 +79,7 @@ def translate_line(line: str) -> str:
                     i += 1
                 value = line[start:i]
                 i += 1
-                result.write(f"<span class=\"article-bold\">{translate_line(value)}</span>")
+                result.write(f"<span class=\"article-bold\">{html_escape(translate_line(value))}</span>")
             case "[":
                 start = i + 1
                 escape_count = 0
@@ -108,9 +109,9 @@ def translate_line(line: str) -> str:
                     end = i
                     i += 1
                     url = line[start:end]
-                    result.write(f"<a href=\"{url}\">{value}</a>")
+                    result.write(f"<a href=\"{url}\">{html_escape(value)}</a>")
                 else:
-                    result.write(f"[{translate_line(value)}]")
+                    result.write(f"[{html_escape(translate_line(value))}]")
             case _:
                 result.write(line[i])
                 i += 1
@@ -140,9 +141,9 @@ def translate_post_to_html(output: StringIO, source: str):
                 prev_is_normal_text = False
             in_code_block = not in_code_block 
             if in_code_block:
-                output.write("<div class=\"article-code\">\n")
+                output.write("<pre class=\"article-code\"><code>\n")
             else:
-                output.write("</div>\n")
+                output.write("<code></pre>\n")
         elif len(line.lstrip()) == 0:
             if prev_is_normal_text:
                 output.write("</p>\n")
@@ -156,7 +157,6 @@ def translate_post_to_html(output: StringIO, source: str):
     if prev_is_normal_text:
         output.write("</p>\n")
         prev_is_normal_text = False
-    return source
 
 def compile_post(filename: str, source: str) -> Tuple[Dict[str, Any], str]:
     # Peek if there's front-matter
