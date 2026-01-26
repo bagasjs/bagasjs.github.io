@@ -25,13 +25,23 @@ html_template = Template(
             <section id="${section_name}">
                 ${post}
             </section>
-            <footer> 2026 BagasJS </footer>
+            <footer> Copyright 2026 BagasJS </footer>
         </div>
     </body>
 </html>
 """)
 
-post_item = Template(""" <li> ${date} - <a href="/articles/2026-01-26.html">${title}</a> </li>\n""")
+post_item = Template(
+""" 
+<div class="post-item">
+    <div class="project-name">
+        ${date}
+    </div>
+    <div class="project-excerpt">
+        <a href="${url}">${title}</a> 
+    </div>
+</div>
+""")
 
 def translate_line(line: str) -> str:
     if len(line) == 0: return line
@@ -154,7 +164,7 @@ def compile_post(filename: str, source: str) -> Tuple[Dict[str, Any], str]:
     if lines[0].startswith("---"):
         pass
     i = 1
-    metadata = {"__file__": filename }
+    metadata = {"__input__": filename }
     while i < len(lines):
         if lines[i].startswith("---"):
             i += 1
@@ -172,19 +182,22 @@ if __name__ == "__main__":
     for name in os.listdir(os.getcwd()):
         if not name.endswith(".md"):
             continue
-        output_filename = f"{os.path.splitext(name)[0]}.html"
         with open(name, "r") as file:
             metadata, html = compile_post(name, file.read())
             html = html_template.substitute(title=metadata["title"], post=html, section_name="articles")
+            output_filename = f"{os.path.splitext(name)[0]}.html"
+            metadata["__output__"] = output_filename
             with open(output_filename, "w") as outputf:
                 outputf.write(html)
             posts.append(metadata)
+
     index_body =  '<h1 class="section-title"><a href="#articles">Articles</a></h1>\n'
     if len(posts) > 0:
-        index_body += f'<ul style="list-style-position: inside;">\n'
+        index_body += f'<div class="projects-list">\n'
         for post in posts:
-            index_body += post_item.substitute(title=post["title"], date=post["date"])
-        index_body += f'</ul>\n'
+            url = f"/articles/{post['__output__']}"
+            index_body += post_item.substitute(title=post["title"], date=post["date"], url=url)
+        index_body += f'</div>\n'
     else:
         index_body += "<p>There's no article currently</p>"
     with open("articles.html", "w") as file:

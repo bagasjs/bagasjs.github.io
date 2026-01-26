@@ -65,9 +65,17 @@ section {
     flex-direction: column;
     gap: 0.25rem;
 }
+
+.post-item {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 0.25rem;
+}
+
 .project-name {
     font-weight: 600;
 }
+
 .project-excerpt {
     color: #374151;
     line-height: 1.5;
@@ -80,6 +88,14 @@ section {
         column-gap: 1.5rem;
         align-items: start;
     }
+
+    .post-item {
+        display: grid;
+        grid-template-columns: 220px 1fr; /* fixed name column */
+        column-gap: 1.5rem;
+        align-items: start;
+    }
+
     .project-name {
         font-weight: 600;
         word-break: break-word;
