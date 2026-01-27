@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title> What I've learnt by working with the most popular esoteric programming language.</title>
+        <title>What I've learnt by working with the most popular esoteric programming language.</title>
         <link rel="stylesheet" href="/style.css">
     </head>
     <body>
@@ -17,21 +17,21 @@
                 </div>
             </header>
             <section id="articles">
-                <h1 class="article-h1"> What I've learnt by working with the most popular esoteric programming language.</h1>
+                <h1 class="article-h1"> What I&#x27;ve learnt by working with the most popular esoteric programming language.</h1>
 <p class="article-p">
 <span class="article-bold">I wrote this as the first and as a test post for my website.</span>
 </p>
 <p class="article-p">
-This is what I've learnt by working with one of the most popular esoteric programming language: <a href="https://en.wikipedia.org/wiki/Brainfuck">Brainfuck</a>. Brainfuck is an extreme minimalistic programming language. It only has 8 simple commands. 
+This is what I&#x27;ve learnt by working with one of the most popular esoteric programming language: <a href="https://en.wikipedia.org/wiki/Brainfuck">Brainfuck</a>. Brainfuck is an extreme minimalistic programming language. It only has 8 simple commands. 
 </p>
 <p class="article-p">
 I wrote the Brainfuck interpreter in C. It has a few modifications and hacks that will makes it a bit more
-useful and faster. First of all, in Brainfuck there's usually a common sequence of instructions that you can just
+useful and faster. First of all, in Brainfuck there&#x27;s usually a common sequence of instructions that you can just
 optimize out e.g. <span class="article-inline-code">[-]</span>. This operations basically loop until the data in current cell to be 0. We can optimize 
 this by just immediately set the current cell to 0 rather than looping until it become 0. Another modification is 
 to add FFI (Foreign Function Interface). FFI is a common practice in an interpreted programming language to provide
-a way to use a native or host system's functionality into the interpreted programming language. My Brainfuck interpreter
-basically reuse the <span class="article-inline-code">.</span> syntax rather than printing the current cell's data as a character it basically act like 
+a way to use a native or host system&#x27;s functionality into the interpreted programming language. My Brainfuck interpreter
+basically reuse the <span class="article-inline-code">.</span> syntax rather than printing the current cell&#x27;s data as a character it basically act like 
 a syscall in Linux where you provide the data as a stack in the tape then it will call the according function.
 </p>
 <p class="article-p">
@@ -39,14 +39,14 @@ My initial goal with Brainfuck was to implement a Game of Life. But I quickly un
 with brainfuck purely is a huge pain. With that insight in my mind, I decided to write a programming language that
 will compile to Brainfuck. Both Brainfuck and Game Of Life is a <a href="https://en.wikipedia.org/wiki/Turing_completeness">Turing complete system</a>
 Any system of data-manipulation rules can be said turing complete if it can be used to simulate any 
-turing machine (including itself). Thus my language (that's compiled into Brainfuck) also need to be turing complete.
-On top of that, the language also need to be more expressive than Brainfuck since if it's not then there's no benefit 
+turing machine (including itself). Thus my language (that&#x27;s compiled into Brainfuck) also need to be turing complete.
+On top of that, the language also need to be more expressive than Brainfuck since if it&#x27;s not then there&#x27;s no benefit 
 on writing such language in the first place. 
 </p>
 <p class="article-p">
 So the language is a small stack-based and concatenative programming language inspired by <a href="https://en.wikipedia.org/wiki/Forth_(programming_language)">Forth</a> and <a href="https://github.com/tsoding/porth">Porth</a>. 
 The development of the language initially goes pretty well until I need to implement array. It took me a few weeks 
-to understand that with my current approach (which will become clear later) won't be successful. Thus in the end I 
+to understand that with my current approach (which will become clear later) won&#x27;t be successful. Thus in the end I 
 dropped the project. 
 </p>
 <pre class="article-code"><code>
@@ -67,18 +67,18 @@ while dup N lt do
     ;; b (a+b)
     add
 end
-;; as you can see there's no variable in this language
+;; as you can see there&#x27;s no variable in this language
 ;; we operate by manipulating the stack.
 </p>
-<code></pre>
+</code></pre>
 <p class="article-p">
-The problem of implementing array comes because Brainfuck as the underlying system doesn't have the capability of random access. Random access is basically the ability of computer to read or write data instantly from any location. Brainfuck doesn't have this capability since it only can move the data pointers and modify data pointed by the data pointer. 
+The problem of implementing array comes because Brainfuck as the underlying system doesn&#x27;t have the capability of random access. Random access is basically the ability of computer to read or write data instantly from any location. Brainfuck doesn&#x27;t have this capability since it only can move the data pointers and modify data pointed by the data pointer. 
 </p>
 <p class="article-p">
-There might be a solution to solve this random access problem. For example, I found out that to layout the data into a structure of data and metadata repeated in the tape may fix this problem since we have additional data (the metadata) about the data to work on while reading the data in the current cell. But this requires a huge refactor of the whole code even including the interpreter since FFI expect the data to be layouted immediately without in-between of metadata. But it's just an opinion and I think it's not worth my time to work further.
+There might be a solution to solve this random access problem. For example, I found out that to layout the data into a structure of data and metadata repeated in the tape may fix this problem since we have additional data (the metadata) about the data to work on while reading the data in the current cell. But this requires a huge refactor of the whole code even including the interpreter since FFI expect the data to be layouted immediately without in-between of metadata. But it&#x27;s just an opinion and I think it&#x27;s not worth my time to work further.
 </p>
 <p class="article-p">
-In the future, I might want to works with something like this again. There's <a href="https://esolangs.org/wiki/Subleq">another promising esoteric programming language</a> that I think would be easier to use but also still unique and cool to work on. But it will have to wait LOL.
+In the future, I might want to works with something like this again. There&#x27;s <a href="https://esolangs.org/wiki/Subleq">another promising esoteric programming language</a> that I think would be easier to use but also still unique and cool to work on. But it will have to wait LOL.
 </p>
 <h3 class="article-h3"> Other Links</h3>
 <p class="article-p">

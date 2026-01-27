@@ -143,7 +143,7 @@ def translate_post_to_html(output: StringIO, source: str):
             if in_code_block:
                 output.write("<pre class=\"article-code\"><code>\n")
             else:
-                output.write("<code></pre>\n")
+                output.write("</code></pre>\n")
         elif len(line.lstrip()) == 0:
             if prev_is_normal_text:
                 output.write("</p>\n")
@@ -170,7 +170,7 @@ def compile_post(filename: str, source: str) -> Tuple[Dict[str, Any], str]:
             i += 1
             break
         key, value = lines[i].split(":", maxsplit=1)
-        metadata[key] = value
+        metadata[key.strip()] = value.strip()
         i += 1
     body = "\n".join(lines[i:])
     output = StringIO()
@@ -190,6 +190,7 @@ if __name__ == "__main__":
             with open(output_filename, "w") as outputf:
                 outputf.write(html)
             posts.append(metadata)
+    posts.sort(key=lambda p: p["date"], reverse=True)
 
     index_body =  '<h1 class="section-title"><a href="#articles">Articles</a></h1>\n'
     if len(posts) > 0:
