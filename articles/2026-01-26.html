@@ -49,6 +49,28 @@ The development of the language initially goes pretty well until I need to imple
 to understand that with my current approach (which will become clear later) won't be successful. Thus in the end I 
 dropped the project. 
 </p>
+<pre class="article-code"><code>
+<p class="article-p">
+;; This is an example program that calculate fibonacci number in bfcat the high-level 
+;; Programming language that compiles on top of Brainfuck
+;; N is a preprocessor definitions like #define N 10 in C
+def N 100 end 
+;; a b
+0 1
+while dup N lt do
+    ;; print a
+    over print
+    ;; b a
+    swap
+    ;; b a b
+    over
+    ;; b (a+b)
+    add
+end
+;; as you can see there's no variable in this language
+;; we operate by manipulating the stack.
+</p>
+<code></pre>
 <p class="article-p">
 The problem of implementing array comes because Brainfuck as the underlying system doesn't have the capability of random access. Random access is basically the ability of computer to read or write data instantly from any location. Brainfuck doesn't have this capability since it only can move the data pointers and modify data pointed by the data pointer. 
 </p>
