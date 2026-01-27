@@ -113,7 +113,7 @@ def translate_line(line: str) -> str:
                 else:
                     result.write(f"[{html_escape(translate_line(value))}]")
             case _:
-                result.write(line[i])
+                result.write(html_escape(line[i]))
                 i += 1
     return result.getvalue()
 
