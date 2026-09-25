@@ -121,7 +121,9 @@ def translate_post_to_html(output: StringIO, source: str):
     lines = source.splitlines()
     in_code_block = False
     prev_is_normal_text = False
-    for line in lines:
+    line_num = 0
+    while line_num < len(lines):
+        line = lines[line_num]
         if line.startswith("#"):
             if prev_is_normal_text:
                 output.write("</p>\n")
@@ -140,10 +142,13 @@ def translate_post_to_html(output: StringIO, source: str):
                 output.write("</p>\n")
                 prev_is_normal_text = False
             in_code_block = not in_code_block 
-            if in_code_block:
-                output.write("<pre class=\"article-code\"><code>\n")
-            else:
-                output.write("</code></pre>\n")
+            line_num += 1
+            output.write("<pre class=\"article-code\"><code>\n")
+            while not lines[line_num].startswith("```"):
+                output.write(f"{html_escape(lines[line_num])}\n")
+                line_num += 1
+                pass
+            output.write("</code></pre>\n")
         elif len(line.lstrip()) == 0:
             if prev_is_normal_text:
                 output.write("</p>\n")
@@ -154,6 +159,8 @@ def translate_post_to_html(output: StringIO, source: str):
             output.write(f"{translate_line(line)}\n")
             prev_is_normal_text = True
             pass
+        line_num += 1
+
     if prev_is_normal_text:
         output.write("</p>\n")
         prev_is_normal_text = False

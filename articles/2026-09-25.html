@@ -1,0 +1,206 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>I made a new Javascript Framework (clickbait)</title>
+        <link rel="stylesheet" href="/style.css">
+    </head>
+    <body>
+        <div id="root">
+            <header>
+                <h1 id="logo">bagasjs</h1>
+                <div class="menu">
+                    <div class="menu-item"><a href="/">Home</a></div>
+                    <div class="menu-item"><a href="/articles/articles.html">Articles</a></div>
+                </div>
+            </header>
+            <section id="articles">
+                <h1 class="article-h1"> I made a new Javascript Framework (clickbait)</h1>
+<p class="article-p">
+It&#x27;s kinda weird talking about Javascript Framework in the time where AI is the current hype. But I don&#x27;t care, 
+because I just want to share what I find when working with the web recently. 
+</p>
+<p class="article-p">
+Recently, I finally got a job. But for the earlier months, I spent too much of my salary. I am thinking what should I do?
+Well I should record my cash flow. But I don&#x27;t trust any application to keep my financial information. So I decided to
+make my own book keeping application. Since I didn&#x27;t wanna think too much about it and I want it to be available in my phone,
+I just straightly choose to build it in the web. But I love small software, thus I won&#x27;t be using any of the web frameworks.
+</p>
+<p class="article-p">
+I called it <a href="https://github.com/bagasjs/yuuka">Yuuka</a>, it&#x27;s just have 2 file the <span class="article-bold"></span>index.html<span class="article-bold"></span> and the <span class="article-bold"></span>index.js<span class="article-bold"></span>. 
+At first I tried to just make it a static HTML and hide some of the menus. But I quickly ended up wanting to have a dynamic UI.
+Especially for the <span class="article-bold"></span>manual journal form<span class="article-bold"></span>. Now, usually without any of the modern web framework you will need to wrangle
+with <span class="article-inline-code">document.createElement</span> for constructing the DOM element. But it&#x27;s too sucks because now building the UI is not
+declarative just like how I do it in the HTML. Then, I remembered that one of streamer that I watched 
+<a href="https://github.com/tsoding">Tsoding</a> have a pretty cool library or rather a way to declaratively do UI in the web without
+all the modern web framework which is <a href="https://github.com/tsoding/grecha.js">grecha.js</a>. I&#x27;ve used this technique a fair amount
+of times in the past for working with my web project. 
+</p>
+<p class="article-p">
+So what&#x27;s the technique proposed by <span class="article-bold"></span>grecha.js<span class="article-bold"></span>? It&#x27;s basically just this few lines of code
+</p>
+<pre class="article-code"><code>
+function tag(name, ...children) {
+    const result = document.createElement(name);
+    for (const child of children) {
+        if (typeof(child) === 'string') {
+            result.appendChild(document.createTextNode(child));
+        } else {
+            result.appendChild(child);
+        }
+    }
+
+    result.att$ = function(name, value) {
+        this.setAttribute(name, value);
+        return this;
+    };
+
+    result.onclick$ = function(callback) {
+        this.onclick = callback;
+        return this;
+    };
+
+    return result;
+}
+</code></pre>
+<p class="article-p">
+It&#x27;s so simple right? It&#x27;s basically the builder pattern that you embed/extend to the already existing DOM element object.
+Now you can easily do something like this
+</p>
+<pre class="article-code"><code>
+tag(
+    "ol",
+    tag("li", "apple")
+    tag("li", "orange")
+)
+</code></pre>
+<p class="article-p">
+Well, but I kinda want more so I usually do something like this. Because usually, you want to add children 
+to an element dynamically not only at the element construction time.
+</p>
+<pre class="article-code"><code>
+function el$(tag) {
+    const result = document.createElement(tag);
+    result.add$ = function(...items) {
+        for(const item of items) {
+            if(typeof item === "string") {
+                this.appendChild(document.createTextNode(item))
+            } else {
+                this.appendChild(item)
+            }
+        }
+        return this;
+    }
+    result.att$ = function(key, value) {
+        this.setAttribute(key, value)
+        return this
+    }
+    result.onclick$ = function(callback) {
+        this.onclick = callback
+        return this;
+    }
+    return result;
+}
+</code></pre>
+<p class="article-p">
+But here&#x27;s the thing, it&#x27;s still not ergonomic and clean. Consider the following example
+</p>
+<pre class="article-code"><code>
+const fruits = ["Apple", "Banana", "Orange"]
+const listEl = el$("ol")
+for (const fruit of fruits) {
+    const normalized = fruit.trim().toLowerCase()
+    const label = normalized[0].toUpperCase() + normalized.slice(1)
+    const item = el$("li")
+        .att$("data-fruit", normalized)
+        .add$(label)
+
+    listEl.add$(item)
+}
+document.body.appendChild(listEl)
+</code></pre>
+<p class="article-p">
+It&#x27;s kinda sucks imagine if I have to add another list e.g. animals. I can&#x27;t just copy all those statements
+because then I will have duplicate variables listEl and now I have to find another name for listEl. Now,
+I know that you can inline it into two statement by using <span class="article-inline-code">.forEach</span> method but my brain doesn&#x27;t get to that
+conclusion at the moment. But I think I come up to a better solution for this ergonomicity problem that I
+think ended up making this utility like 10x times more useful. You basically just need to add <span class="article-inline-code">.body$</span> method
+</p>
+<pre class="article-code"><code>
+function el$(tag) {
+    const result = document.createElement(tag);
+    result.add$ = function(...items) {
+        for(const item of items) {
+            if(typeof item === "string") {
+                this.appendChild(document.createTextNode(item))
+            } else {
+                this.appendChild(item)
+            }
+        }
+        return this;
+    }
+    result.att$ = function(key, value) {
+        this.setAttribute(key, value)
+        return this
+    }
+    result.onclick$ = function(callback) {
+        this.onclick = callback
+        return this;
+    }
+    result.body$ = function(callback) {
+        callback(this);
+        return this;
+    }
+    return result;
+}
+</code></pre>
+<p class="article-p">
+What <span class="article-inline-code">.body$</span> method do is basically just call a function that pass that element that call it into that callback.
+Well that sentence is tounge twister. But what basically <span class="article-inline-code">.body$</span> enables is now you can do this.
+</p>
+<pre class="article-code"><code>
+const fruits = ["Apple", "Banana", "Orange"]
+document.body.appendChild(el$("ol").body$(listEl => {
+    for (const fruit of fruits) {
+        const normalized = fruit.trim().toLowerCase()
+        const label = normalized[0].toUpperCase() + normalized.slice(1)
+        const item = el$("li")
+            .att$("data-fruit", normalized)
+            .add$(label)
+
+        listEl.add$(item)
+    }
+}))
+</code></pre>
+<p class="article-p">
+Doesn&#x27;t that feels more ergonomic? You can still do imperative programming when you need to while having the access
+to that element you want to build. Instead of using <span class="article-inline-code">.forEach</span>, I think this is a better solution. Moreover, this
+technique has a side effect. Look at the following.
+</p>
+<pre class="article-code"><code>
+document.body.appendChild(el$("form").body$(form => {
+    const items = el$("ol")
+    form.add$(items)
+    let i = 0;
+    form.add$(el$("button").onclick$(_ => {
+        items.add$(el$("li").add$("hello, ", i)
+        i += 1
+    })
+})
+</code></pre>
+<p class="article-p">
+Can you see it? now you suddenly can create a dynamic UI. And not only that, you also have a local state for that element,
+and also easily accessing other siblings element while building other element. This is happened because all those state
+is actually stored automatically as a closure of that callback. While this might impact your memory usage because closure
+is not free, I think for a small website this is acceptable. I would even use this for some of my production website 
+(if I have to do web in the future) because even though it&#x27;s stupid at least the idea is simple enough that you can
+just inspect it later.
+</p>
+
+            </section>
+            <footer> Copyright 2026 BagasJS </footer>
+        </div>
+    </body>
+</html>
